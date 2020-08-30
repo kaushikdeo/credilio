@@ -1,6 +1,17 @@
 const cheerio = require('cheerio');
 const request = require('request-promise');
 
+const getJsonFromUrl = (url) => {
+    if(!url) url = location.search;
+    var query = url.substr(1);
+    var result = {};
+    query.split("&").forEach(function(part) {
+      var item = part.split("=");
+      result[item[0]] = decodeURIComponent(item[1]);
+    });
+    return result;
+  }
+
 const fetchData = async (REQUEST_URL) => {
     const response = await request({
         uri: REQUEST_URL,
@@ -19,6 +30,12 @@ const fetchData = async (REQUEST_URL) => {
     const allPgRating = pgRating.split("&").slice(0,-1);
     const allGenres = genre.split("&").slice(0,-1);
     const allDurations = duration.split("&").slice(0,-1);
+
+    const queryParamerters = await getJsonFromUrl(REQUEST_URL);
+    const start = queryParamerters.start ? Number(queryParamerters.start) : 1;
+    const count = Number(queryParamerters.count);
+    console.log('start', start);
+    if (start < 200 ) fetchData(`https://www.imdb.com/search/title/?groups=top_1000&sort=user_rating,desc&count=10&start=${start+count}&ref_=adv_nxt`)
 }
 
 module.exports = fetchData;
