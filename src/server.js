@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const Movie = require('./models/movie');
 const fetchData = require('./utils/fetchIMDBData');
 
 const {
@@ -13,7 +14,13 @@ mongoose.connect(MONGODB_URL, {useNewUrlParser: true, useUnifiedTopology: true})
 const app = express();
 
 app.get('/', async (req, res, next) => {
-    await fetchData(REQUEST_URL);
+    try {
+        if (await Movie.countDocuments().exec() <= 0){
+            await fetchData(REQUEST_URL);
+        }
+    } catch (error) {
+        console.log(error);
+    }
     res.send("response");
 });
 
