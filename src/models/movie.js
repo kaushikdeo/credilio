@@ -25,6 +25,9 @@ const MovieSchema = new Schema({
     genre: [{
         type: String
     }],
+    poster: {
+        type: String,
+    }
 }, {timestamps: true})
 
 module.exports = model('Movie', MovieSchema);

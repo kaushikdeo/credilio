@@ -26,13 +26,14 @@ const fetchData = async (REQUEST_URL) => {
         const pgRating = $('span[class="certificate"]').append("&").text().trim();
         const genre = $('span[class="genre"]').append("&").text().trim();
         const duration = $('span[class="runtime"]').append("&").text().trim();
+        const imageUrl = $('img[class="loadlate"]').append("&").attr('src');
         const allTitles = title.split("&").slice(0,-1);
         const allImdbRating = imdbRating.split("&").slice(0,-1);
         const allDescriptions = description.split("&").slice(0,-1);
         const allPgRating = pgRating.split("&").slice(0,-1);
         const allGenres = genre.split("&").slice(0,-1);
         const allDurations = duration.split("&").slice(0,-1);
-    
+        console.log('imageUrl', imageUrl);
         for(let i=0; i < allTitles.length; i++) {
             Movie.create({
                 name: allTitles[i],
@@ -41,6 +42,7 @@ const fetchData = async (REQUEST_URL) => {
                 description: allDescriptions[i],
                 duration: Number(allDurations[i].split("min")[0]),
                 genre: allGenres[i].split(","),
+                poster: 'https://m.media-amazon.com/images/G/01/imdb/images/nopicture/large/film-184890147._CB466725069_.png',
             }, {upsert: true});
         }
     

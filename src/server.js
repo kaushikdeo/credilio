@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Movie = require('./models/movie');
+const moviesRoute = require('./routes');
 const fetchData = require('./utils/fetchIMDBData');
 
 const {
@@ -13,6 +14,12 @@ mongoose.connect(MONGODB_URL, {useNewUrlParser: true, useUnifiedTopology: true})
 
 const app = express();
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
 app.get('/', async (req, res, next) => {
     try {
         if (await Movie.countDocuments().exec() <= 0){
@@ -21,8 +28,10 @@ app.get('/', async (req, res, next) => {
     } catch (error) {
         console.log(error);
     }
-    res.send("response");
+    res.send("Welcome to web scraper");
 });
+
+app.use('/api', moviesRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is live on http://localhost:${PORT}`);
