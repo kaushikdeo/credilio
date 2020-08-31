@@ -1,7 +1,7 @@
 ## Steps to run
 
 ### `git clone https://github.com/kaushikdeo/credilio_react.git`
-### `cd credilio_react/`
+### `cd credilio/`
 ### `npm i`
 ### `npm start`
 
