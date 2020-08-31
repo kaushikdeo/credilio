@@ -9,26 +9,21 @@ router.get('/movies', async (req, res, next) => {
     const orderBy = Number(req.query.orderBy) === 1 ? 1 : -1;
     const filterString = req.query.filter ? req.query.filter.toString() : "";
     const sortBy = req.query.sortBy ? req.query.sortBy.toString() : 'imdbRating' ;
-    console.log('req.query.filterByDescription', req.query.filterByDescription);
     const filterByDescription = Number(req.query.filterByDescription) === 0 ? false : true;
-    console.log('filterByDescription', filterByDescription);
-    let filterQuery = {
-        name: new RegExp(filterString, 'i'),
-    };
+    let filterQuery = {};
     if (filterByDescription) {
         filterQuery = {
             $or: [{ description: new RegExp(filterString, 'i') }, { name: new RegExp(filterString, 'i'), }]
         };
-    };
-    console.log('sortBy', sortBy);
+    } else {
+        filterQuery = {
+            name: new RegExp(filterString, 'i'),
+        };
+    }
     const sortQuery = {
         [sortBy]: orderBy,
     };
     const moviesLength = await Movie.countDocuments(filterQuery);
-    console.log('filterQuery', filterQuery);
-    console.log('sortQuery', sortQuery);
-    console.log('startIndex', startIndex);
-    console.log('limit', limit);
     const allMovies = await Movie.find(filterQuery).limit(limit).skip(startIndex).sort(sortQuery);
     res.send({
         allMovies,

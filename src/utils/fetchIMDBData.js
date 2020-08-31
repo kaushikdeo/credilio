@@ -33,7 +33,6 @@ const fetchData = async (REQUEST_URL) => {
         const allPgRating = pgRating.split("&").slice(0,-1);
         const allGenres = genre.split("&").slice(0,-1);
         const allDurations = duration.split("&").slice(0,-1);
-        console.log('imageUrl', imageUrl);
         for(let i=0; i < allTitles.length; i++) {
             Movie.create({
                 name: allTitles[i],
